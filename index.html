@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <style>
+       #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0;} 
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee Shops Map</title>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // Map tiles
+        var map = L.map('map').setView([53.47406148208404, -2.242038944738471], 12);
+        L.tileLayer('https://api.maptiler.com/maps/openstreetmap/{z}/{x}/{y}.jpg?key=ozOUQ49qh9IMKjA3bF1s', {
+            attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+        }).addTo(map);
+
+        // Coffee shop markers
+        var shops = [
+          {
+            name: "The Art of Tea",
+            andrewRating: "☕☕☕",
+            oliviaRating: "☕☕☕☕☕",
+            image: "https://images2.imgbox.com/e7/49/7dqycXKS_o.jpg",
+            link: "https://www.instagram.com/p/DKb3MUoK1AW/?img_index=1",
+            coords: [53.41825382642731, -2.233787331795336]
+          },
+          {
+            name: "Bryson's",
+            andrewRating: "9/10",
+            image: "https://images2.imgbox.com/65/6c/6s8zim5r_o.jpeg",
+            link: "https://www.instagram.com/p/DI1bEgLq_jr/?img_index=1",
+            coords: [54.36430592453498, -2.919910277799059]
+          }
+        ];
+
+        // On-click popup display
+        shops.forEach(function(shop) {
+          var marker = L.marker(shop.coords).addTo(map);
+
+          // Checks for entries
+          var popupLines = [
+            '<b>' + shop.name + '</b>',
+            shop.andrewRating != null ? 'Andrew’s rating: ' + shop.andrewRating : null,
+            shop.oliviaRating != null ? 'Olivia’s rating: ' + shop.oliviaRating : null,
+            shop.image ? '<img src="' + shop.image + '" alt="' + shop.name + '" style="width:200px; height:auto; border-radius:10px; margin:6px 0;">' : null,
+            shop.link ? '<a href="' + shop.link + '" target="_blank">View Post →</a>' : null
+          ].filter(function(line) { return line; }); // Remove null/undefined entries
+
+          var popupContent = '<div style="text-align:center; line-height:1.4;">' + popupLines.join('<br>') + '</div>';
+
+          marker.bindPopup(popupContent);
+        });
+    </script>
+</body>
+</html>
